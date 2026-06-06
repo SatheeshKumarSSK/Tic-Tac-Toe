@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/.angular/
+tic-tac-toe-client/node_modules/
+tic-tac-toe-client/dist/
+TicTacToe.Api/tictactoe.db
+TicTacToe.Api/tictactoe.db-shm
+TicTacToe.Api/tictactoe.db-wal
+TicTacToe.Api/*.db
+TicTacToe.Api/*.log
+tic-tac-toe-client/*.log
+*.user
+*.suo
