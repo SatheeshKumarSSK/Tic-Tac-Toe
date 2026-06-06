@@ -1,0 +1,12 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+body {
+    min-height: 100vh;
+    background: #f6f7f2;
+    color: #1f2933;
+}
+
+button {
+    letter-spacing: 0;
+}

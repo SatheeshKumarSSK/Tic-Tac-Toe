@@ -1,0 +1,161 @@
+.app-shell {
+    min-height: 100vh;
+}
+
+.top-band {
+    background: #ffffff;
+    border-bottom: 1px solid #d9ddd2;
+    padding: 18px 0;
+}
+
+h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+h2 {
+    font-size: 1rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.status-line {
+    color: #52616b;
+    font-weight: 600;
+}
+
+.mode-select {
+    min-width: 160px;
+}
+
+.layout-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) minmax(320px, 420px);
+    gap: 24px;
+    align-items: start;
+}
+
+.board-panel,
+.side-panel,
+.history-panel {
+    background: #ffffff;
+    border: 1px solid #d9ddd2;
+    border-radius: 8px;
+}
+
+.board-panel {
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.board {
+    width: min(78vw, 520px);
+    aspect-ratio: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.board-cell {
+    aspect-ratio: 1;
+    border: 2px solid #2f3a3f;
+    border-radius: 8px;
+    background: #f9faf7;
+    color: #1f2933;
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1;
+    transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.board-cell:not(:disabled):hover {
+    background: #eef3e8;
+    transform: translateY(-1px);
+}
+
+.board-cell:disabled {
+    opacity: 1;
+}
+
+.x-cell {
+    color: #0d6efd;
+}
+
+.o-cell {
+    color: #b02a37;
+}
+
+.winning-cell {
+    background: #d1e7dd;
+    border-color: #198754;
+}
+
+.side-panel {
+    padding: 16px;
+}
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.score-card {
+    border: 1px solid #d9ddd2;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f9faf7;
+}
+
+.score-card span {
+    display: block;
+    color: #52616b;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.score-card strong {
+    display: block;
+    font-size: 1.7rem;
+    line-height: 1.1;
+}
+
+.action-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 14px 0;
+}
+
+.history-panel {
+    padding: 14px;
+}
+
+.table {
+    font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+    .layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .board {
+        width: min(92vw, 520px);
+    }
+}
+
+@media (max-width: 520px) {
+    .action-row,
+    .score-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .board-panel {
+        padding: 12px;
+    }
+}

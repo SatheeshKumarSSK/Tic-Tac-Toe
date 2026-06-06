@@ -1,0 +1,114 @@
+<main class="app-shell">
+    <section class="top-band">
+        <div class="container-fluid px-3 px-lg-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h1 class="mb-1">Tic Tac Toe</h1>
+                    <div class="status-line">{{statusMessage()}}</div>
+                </div>
+
+                <form class="d-flex flex-wrap align-items-center gap-2" autocomplete="off">
+                    <label class="fw-semibold" for="gameMode">Mode</label>
+                    <select id="gameMode" class="form-select mode-select" name="gameMode" [(ngModel)]="selectedMode" [disabled]="loading" (change)="createGame()">
+                        <option value="TwoPlayer">Two Player</option>
+                        <option value="Computer">Computer</option>
+                    </select>
+                    <button class="btn btn-dark" type="button" title="New game" [disabled]="loading" (click)="createGame()">
+                        <i class="fa-solid fa-plus me-1"></i>
+                        New Game
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid px-3 px-lg-4 py-4">
+        @if (gameService.currentGame(); as game) {
+            <div class="layout-grid">
+                <div class="board-panel">
+                    <div class="board" aria-label="Tic Tac Toe board">
+                        @for (row of game.board; track $index; let rowIndex = $index) {
+                            @for (cell of row; track $index; let columnIndex = $index) {
+                                <button class="board-cell"
+                                    type="button"
+                                    [attr.aria-label]="cellLabel(rowIndex, columnIndex)"
+                                    [class.x-cell]="cell === 'X'"
+                                    [class.o-cell]="cell === 'O'"
+                                    [class.winning-cell]="isWinningCell(rowIndex, columnIndex)"
+                                    [disabled]="loading || game.gameStatus !== 'InProgress' || !!cell"
+                                    (click)="makeMove(rowIndex, columnIndex)">
+                                    {{cell}}
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <aside class="side-panel">
+                    <div class="score-grid">
+                        <div class="score-card">
+                            <span>X Wins</span>
+                            <strong>{{game.scoreboard.xWins}}</strong>
+                        </div>
+                        <div class="score-card">
+                            <span>O Wins</span>
+                            <strong>{{game.scoreboard.oWins}}</strong>
+                        </div>
+                        <div class="score-card">
+                            <span>Draws</span>
+                            <strong>{{game.scoreboard.draws}}</strong>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn btn-outline-dark" type="button" title="Undo last move" [disabled]="loading || !game.canUndo" (click)="undo()">
+                            <i class="fa-solid fa-rotate-left me-1"></i>
+                            Undo
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" title="Reset game" [disabled]="loading" (click)="resetGame()">
+                            <i class="fa-solid fa-arrow-rotate-right me-1"></i>
+                            Reset
+                        </button>
+                        <button class="btn btn-outline-danger" type="button" title="Reset scoreboard" [disabled]="loading" (click)="resetScoreboard()">
+                            <i class="fa-solid fa-trash-can me-1"></i>
+                            Scores
+                        </button>
+                    </div>
+
+                    <div class="history-panel">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h2 class="mb-0">Moves</h2>
+                            <span class="badge text-bg-light">{{game.moveHistory.length}}</span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Move</th>
+                                        <th>Player</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (move of game.moveHistory; track move.moveNumber) {
+                                        <tr>
+                                            <td>{{move.moveNumber}}</td>
+                                            <td>{{move.player}}</td>
+                                            <td>{{move.position}}</td>
+                                        </tr>
+                                    }
+                                    @if (game.moveHistory.length === 0) {
+                                        <tr>
+                                            <td colspan="3" class="text-muted">No moves yet</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        }
+    </section>
+</main>
