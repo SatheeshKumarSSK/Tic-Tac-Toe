@@ -1,13 +1,17 @@
 <main class="app-shell">
     <section class="top-band">
         <div class="container-fluid px-3 px-lg-4">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <div>
+            <div class="header-grid">
+                <div class="title-area">
                     <h1 class="mb-1">Tic Tac Toe</h1>
-                    <div class="status-line">{{statusMessage()}}</div>
                 </div>
 
-                <form class="d-flex flex-wrap align-items-center gap-2" autocomplete="off">
+                <div class="status-banner" [class]="statusClass()">
+                    <i [class]="statusIcon()"></i>
+                    <span>{{statusMessage()}}</span>
+                </div>
+
+                <form class="d-flex flex-wrap align-items-center gap-2" autocomplete="off" style="margin-left: 50%;">
                     <label class="fw-semibold" for="gameMode">Mode</label>
                     <select id="gameMode" class="form-select mode-select" name="gameMode" [(ngModel)]="selectedMode" [disabled]="loading" (change)="createGame()">
                         <option value="TwoPlayer">Two Player</option>
@@ -61,7 +65,7 @@
                     </div>
 
                     <div class="action-row">
-                        <button class="btn btn-outline-dark" type="button" title="Undo last move" [disabled]="loading || !game.canUndo" (click)="undo()">
+                        <button class="btn btn-outline-dark" type="button" title="Undo last move" [disabled]="isUndoDisabled()" (click)="undo()">
                             <i class="fa-solid fa-rotate-left me-1"></i>
                             Undo
                         </button>
@@ -92,7 +96,7 @@
                                 </thead>
                                 <tbody>
                                     @for (move of game.moveHistory; track move.moveNumber) {
-                                        <tr>
+                                        <tr [class.x-move-row]="move.player === 'X'" [class.o-move-row]="move.player === 'O'">
                                             <td>{{move.moveNumber}}</td>
                                             <td>{{move.player}}</td>
                                             <td>{{move.position}}</td>

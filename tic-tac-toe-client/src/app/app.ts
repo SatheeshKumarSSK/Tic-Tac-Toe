@@ -13,6 +13,7 @@ export class App implements OnInit {
   gameService = inject(GameService);
   selectedMode = 'TwoPlayer';
   loading = false;
+  undoLocked = false;
 
   ngOnInit(): void {
     this.createGame();
@@ -21,7 +22,7 @@ export class App implements OnInit {
   createGame() {
     this.loading = true;
     this.gameService.createGame(this.selectedMode).subscribe({
-      next: _ => { },
+      next: _ => this.undoLocked = false,
       error: _ => this.loading = false,
       complete: () => this.loading = false
     })
@@ -35,7 +36,7 @@ export class App implements OnInit {
 
     this.loading = true;
     this.gameService.makeMove(game.gameId, game.currentPlayer, row, column).subscribe({
-      next: _ => { },
+      next: _ => this.undoLocked = false,
       error: _ => this.loading = false,
       complete: () => this.loading = false
     })
@@ -44,12 +45,12 @@ export class App implements OnInit {
   undo() {
     var game = this.gameService.currentGame();
 
-    if (!game || !game.canUndo || this.loading)
+    if (!game || this.isUndoDisabled())
       return;
 
     this.loading = true;
     this.gameService.undo(game.gameId).subscribe({
-      next: _ => { },
+      next: _ => this.undoLocked = true,
       error: _ => this.loading = false,
       complete: () => this.loading = false
     })
@@ -63,7 +64,7 @@ export class App implements OnInit {
 
     this.loading = true;
     this.gameService.resetGame(game.gameId).subscribe({
-      next: _ => { },
+      next: _ => this.undoLocked = false,
       error: _ => this.loading = false,
       complete: () => this.loading = false
     })
@@ -100,5 +101,34 @@ export class App implements OnInit {
       return 'Game drawn';
 
     return `Player ${game.currentPlayer} turn`;
+  }
+
+  statusClass() {
+    var game = this.gameService.currentGame();
+
+    if (!game || game.gameStatus === 'InProgress')
+      return 'turn-status';
+
+    if (game.gameStatus === 'Won')
+      return 'win-status';
+
+    return 'draw-status';
+  }
+
+  statusIcon() {
+    var game = this.gameService.currentGame();
+
+    if (!game || game.gameStatus === 'InProgress')
+      return 'fa-solid fa-user-clock';
+
+    if (game.gameStatus === 'Won')
+      return 'fa-solid fa-trophy';
+
+    return 'fa-solid fa-handshake';
+  }
+
+  isUndoDisabled() {
+    var game = this.gameService.currentGame();
+    return this.loading || !game || !game.canUndo || game.gameStatus !== 'InProgress' || this.undoLocked;
   }
 }

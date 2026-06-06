@@ -3,15 +3,32 @@
 }
 
 .top-band {
-    background: #ffffff;
-    border-bottom: 1px solid #d9ddd2;
-    padding: 18px 0;
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid #d7dfd8;
+    box-shadow: 0 12px 30px rgba(31, 41, 51, 0.08);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+}
+
+.header-grid {
+    display: grid;
+    grid-template-columns: minmax(190px, 1fr) minmax(260px, 420px) minmax(190px, 1fr);
+    gap: 18px;
+    align-items: center;
+}
+
+.title-area {
+    min-width: 0;
 }
 
 h1 {
-    font-size: 1.75rem;
+    color: #16232b;
+    font-size: 1.9rem;
     line-height: 1.2;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0;
 }
 
@@ -23,12 +40,54 @@ h2 {
 }
 
 .status-line {
-    color: #52616b;
+    color: #5b6770;
     font-weight: 600;
+}
+
+.status-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 76px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: clamp(1.35rem, 2.2vw, 2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 10px 22px rgba(31, 41, 51, 0.08);
+}
+
+.status-banner i {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.turn-status {
+    background: #e7f5f7;
+    border-color: #4ba3b7;
+    color: #124f63;
+}
+
+.win-status {
+    background: #e6f4df;
+    border-color: #80b918;
+    color: #315d12;
+}
+
+.draw-status {
+    background: #fff2d4;
+    border-color: #d39e00;
+    color: #704f00;
 }
 
 .mode-select {
     min-width: 160px;
+}
+
+.header-grid form {
+    justify-content: flex-end;
 }
 
 .layout-grid {
@@ -41,9 +100,10 @@ h2 {
 .board-panel,
 .side-panel,
 .history-panel {
-    background: #ffffff;
-    border: 1px solid #d9ddd2;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid #d7dfd8;
     border-radius: 8px;
+    box-shadow: 0 14px 32px rgba(31, 41, 51, 0.09);
 }
 
 .board-panel {
@@ -62,19 +122,27 @@ h2 {
 
 .board-cell {
     aspect-ratio: 1;
-    border: 2px solid #2f3a3f;
+    border: 2px solid #334047;
     border-radius: 8px;
-    background: #f9faf7;
+    background: linear-gradient(145deg, #ffffff 0%, #f0f4ed 100%);
     color: #1f2933;
     font-size: clamp(2.5rem, 10vw, 5.5rem);
     font-weight: 800;
     line-height: 1;
-    transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 8px 18px rgba(31, 41, 51, 0.08);
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 .board-cell:not(:disabled):hover {
     background: #eef3e8;
+    border-color: #0f766e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 12px 24px rgba(15, 118, 110, 0.16);
     transform: translateY(-1px);
+}
+
+.board-cell:focus-visible {
+    outline: 4px solid rgba(75, 163, 183, 0.35);
+    outline-offset: 3px;
 }
 
 .board-cell:disabled {
@@ -82,7 +150,7 @@ h2 {
 }
 
 .x-cell {
-    color: #0d6efd;
+    color: #0b5ed7;
 }
 
 .o-cell {
@@ -90,8 +158,9 @@ h2 {
 }
 
 .winning-cell {
-    background: #d1e7dd;
-    border-color: #198754;
+    background: #dff3d8;
+    border-color: #75a711;
+    box-shadow: 0 0 0 4px rgba(117, 167, 17, 0.16), 0 10px 22px rgba(49, 93, 18, 0.14);
 }
 
 .side-panel {
@@ -105,10 +174,10 @@ h2 {
 }
 
 .score-card {
-    border: 1px solid #d9ddd2;
+    border: 1px solid #d7dfd8;
     border-radius: 8px;
     padding: 12px;
-    background: #f9faf7;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7f1 100%);
 }
 
 .score-card span {
@@ -122,6 +191,7 @@ h2 {
     display: block;
     font-size: 1.7rem;
     line-height: 1.1;
+    color: #17242d;
 }
 
 .action-row {
@@ -139,7 +209,30 @@ h2 {
     font-size: 0.95rem;
 }
 
+.table thead th {
+    color: #52616b;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+}
+
+.table tbody .x-move-row td {
+    background: #eef6ff;
+}
+
+.table tbody .o-move-row td {
+    background: #fff1f3;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 700;
+}
+
 @media (max-width: 900px) {
+    .header-grid {
+        grid-template-columns: 1fr;
+    }
+
     .layout-grid {
         grid-template-columns: 1fr;
     }

@@ -76,14 +76,26 @@ describe('App', () => {
 
   it('should show current player status', async () => {
     const { fixture } = await setup(createGame({ currentPlayer: 'O' }));
+    const banner = fixture.nativeElement.querySelector('.status-banner') as HTMLElement;
 
     expect(fixture.nativeElement.textContent).toContain('Player O turn');
+    expect(banner.classList.contains('turn-status')).toBe(true);
   });
 
   it('should show completed status', async () => {
     const { fixture } = await setup(createGame({ gameStatus: 'Won', winner: 'X' }));
+    const banner = fixture.nativeElement.querySelector('.status-banner') as HTMLElement;
 
     expect(fixture.nativeElement.textContent).toContain('Player X wins');
+    expect(banner.classList.contains('win-status')).toBe(true);
+  });
+
+  it('should show draw status', async () => {
+    const { fixture } = await setup(createGame({ gameStatus: 'Draw', winner: null }));
+    const banner = fixture.nativeElement.querySelector('.status-banner') as HTMLElement;
+
+    expect(fixture.nativeElement.textContent).toContain('Game drawn');
+    expect(banner.classList.contains('draw-status')).toBe(true);
   });
 
   it('should highlight winning cells', async () => {
@@ -105,9 +117,12 @@ describe('App', () => {
 
   it('should render move history', async () => {
     const { fixture } = await setup();
+    const rows = fixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
 
     expect(fixture.nativeElement.textContent).toContain('Row 1, Column 1');
     expect(fixture.nativeElement.textContent).toContain('Row 2, Column 2');
+    expect(rows[0].classList.contains('x-move-row')).toBe(true);
+    expect(rows[1].classList.contains('o-move-row')).toBe(true);
   });
 
   it('should render scoreboard', async () => {
@@ -135,5 +150,57 @@ describe('App', () => {
     expect(gameService.undo).toHaveBeenCalledWith(1);
     expect(gameService.resetGame).toHaveBeenCalledWith(1);
     expect(gameService.resetScoreboard).toHaveBeenCalled();
+  });
+
+  it('should lock undo after one successful undo', async () => {
+    const { fixture, gameService } = await setup();
+    const component = fixture.componentInstance;
+    const undoButton = fixture.nativeElement.querySelector('button[title="Undo last move"]') as HTMLButtonElement;
+
+    undoButton.click();
+    fixture.detectChanges();
+    undoButton.click();
+
+    expect(gameService.undo).toHaveBeenCalledTimes(1);
+    expect(component.undoLocked).toBe(true);
+    expect(undoButton.disabled).toBe(true);
+  });
+
+  it('should unlock undo after next successful move', async () => {
+    const { fixture } = await setup();
+    const component = fixture.componentInstance;
+    const undoButton = fixture.nativeElement.querySelector('button[title="Undo last move"]') as HTMLButtonElement;
+    const cells = fixture.nativeElement.querySelectorAll('.board-cell') as NodeListOf<HTMLButtonElement>;
+
+    undoButton.click();
+    fixture.detectChanges();
+
+    expect(component.undoLocked).toBe(true);
+
+    cells[1].click();
+    fixture.detectChanges();
+
+    expect(component.undoLocked).toBe(false);
+    expect(component.isUndoDisabled()).toBe(false);
+  });
+
+  it('should clear undo lock after reset and new game', async () => {
+    const { fixture } = await setup();
+    const component = fixture.componentInstance;
+    const undoButton = fixture.nativeElement.querySelector('button[title="Undo last move"]') as HTMLButtonElement;
+    const resetButton = fixture.nativeElement.querySelector('button[title="Reset game"]') as HTMLButtonElement;
+    const newGameButton = fixture.nativeElement.querySelector('button[title="New game"]') as HTMLButtonElement;
+
+    undoButton.click();
+    fixture.detectChanges();
+    resetButton.click();
+
+    expect(component.undoLocked).toBe(false);
+
+    undoButton.click();
+    fixture.detectChanges();
+    newGameButton.click();
+
+    expect(component.undoLocked).toBe(false);
   });
 });

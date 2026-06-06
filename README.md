@@ -61,6 +61,12 @@ The API runs at:
 http://localhost:5127
 ```
 
+Swagger UI is available in Development at:
+
+```text
+http://localhost:5127/swagger
+```
+
 SQLite uses:
 
 ```text
@@ -90,6 +96,8 @@ http://localhost:5127/api
 ```
 
 ## API Endpoints
+
+Use Swagger UI at `http://localhost:5127/swagger` to view request models and test endpoints manually.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |

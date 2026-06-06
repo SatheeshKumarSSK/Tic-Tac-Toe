@@ -3,7 +3,9 @@
 
 body {
     min-height: 100vh;
-    background: #f6f7f2;
+    background:
+        radial-gradient(circle at top left, rgba(13, 110, 253, 0.08), transparent 32rem),
+        linear-gradient(135deg, #f7f6ef 0%, #eef3ef 52%, #f5f7fb 100%);
     color: #1f2933;
 }
 
